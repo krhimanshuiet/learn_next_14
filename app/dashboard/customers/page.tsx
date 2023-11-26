@@ -1,10 +1,18 @@
-import React from 'react'
+import { fetchCustomers, fetchFilteredCustomers } from '@/app/lib/data';
+import CustomersTable from '@/app/ui/customers/table'
+import { InvoicesTableSkeleton, TableRowSkeleton } from '@/app/ui/skeletons';
+import React, { Suspense } from 'react'
 
-type Props = {}
+type Props = {
+  searchParams:{query:string,page:string}
+}
 
-const CustomerPage = (props: Props) => {
+const CustomerPage = async ({searchParams:{query}}:{searchParams:{query:string}}) => {
+  const customers = await fetchFilteredCustomers(query || '');
   return (
-    <div>CustomerPage</div>
+    <Suspense fallback={<InvoicesTableSkeleton/>}>
+      <CustomersTable customers={customers} />
+    </Suspense>
   )
 }
 
